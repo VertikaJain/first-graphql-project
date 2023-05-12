@@ -7,12 +7,16 @@ const {
   GraphQLSchema,
   GraphQLID,
   GraphQLInt,
+  GraphQLList,
 } = graphql;
 
 const books = [
   { name: "b1", genre: "g1", id: "1", authorId: "4" },
   { name: "b2", genre: "g2", id: "2", authorId: "5" },
   { name: "b3", genre: "g3", id: "3", authorId: "6" },
+  { name: "b4", genre: "g3", id: "4", authorId: "5" },
+  { name: "b5", genre: "g1", id: "5", authorId: "6" },
+  { name: "b6", genre: "g4", id: "6", authorId: "6" },
 ];
 
 const authors = [
@@ -43,6 +47,12 @@ const AuthorType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     age: { type: GraphQLInt },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args) {
+        return _.filter(books, { authorId: parent.id });
+      },
+    },
   }),
 });
 
