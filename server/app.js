@@ -3,10 +3,13 @@ import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { MyAppSchema } from "./schema/index.js";
 import mongoose from "mongoose";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors()); // allow cross origin requests
 
 mongoose.connect(`${process.env.MONGODB_URI}${process.env.MONGODB_DB_MAIN}`, {
   useNewUrlParser: true,
