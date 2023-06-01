@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_AUTHORS, ADD_BOOK } from "../queries";
+import { GET_AUTHORS, ADD_BOOK, GET_BOOKS } from "../queries";
 
 const AddBook = () => {
   const { loading: loadingAuthors, data: AuthorData } = useQuery(GET_AUTHORS);
 
-  const [bookName, setBookName] = useState("");
-  const [genre, setGenre] = useState("");
-  const [authorId, setauthorId] = useState("");
+  const [, setBookName] = useState("");
+  const [, setGenre] = useState("");
+  const [, setauthorId] = useState("");
 
-  const [addBook, { newBookData, loadingNewBook, error }] = useMutation(
-    ADD_BOOK,
-    {
-      ignoreResults: false, // If true, the mutation's data property is not updated with the mutation's result.
-    }
-  );
+  const [addBook, { data: newBookData }] = useMutation(ADD_BOOK, {
+    ignoreResults: false, // If true, the mutation's data property is not updated with the mutation's result.
+  });
 
   const displayAuthors = () => {
     if (loadingAuthors) return <option disabled>Loading authors...</option>;
@@ -28,7 +25,12 @@ const AddBook = () => {
   const submitForm = (e) => {
     e.preventDefault(); // in order to prevent automatic page refresh whenever we click the + button
     addBook({
-      variables: { name: bookName, authorId: authorId, genre: genre },
+      variables: {
+        name: newBookData.addBook.name,
+        authorId: newBookData.addBook.authorId,
+        genre: newBookData.addBook.genre,
+      },
+      refetchQueries: [GET_BOOKS],
     });
   };
 
