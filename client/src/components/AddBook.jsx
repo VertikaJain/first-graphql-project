@@ -5,11 +5,11 @@ import { GET_AUTHORS, ADD_BOOK, GET_BOOKS } from "../queries";
 const AddBook = () => {
   const { loading: loadingAuthors, data: AuthorData } = useQuery(GET_AUTHORS);
 
-  const [, setBookName] = useState("");
-  const [, setGenre] = useState("");
-  const [, setauthorId] = useState("");
+  const [bookName, setBookName] = useState("");
+  const [genre, setGenre] = useState("");
+  const [authorId, setauthorId] = useState("");
 
-  const [addBook, { data: newBookData }] = useMutation(ADD_BOOK, {
+  const [addBook] = useMutation(ADD_BOOK, {
     ignoreResults: false, // If true, the mutation's data property is not updated with the mutation's result.
   });
 
@@ -26,9 +26,9 @@ const AddBook = () => {
     e.preventDefault(); // in order to prevent automatic page refresh whenever we click the + button
     addBook({
       variables: {
-        name: newBookData.addBook.name,
-        authorId: newBookData.addBook.authorId,
-        genre: newBookData.addBook.genre,
+        name: bookName,
+        authorId: authorId,
+        genre: genre,
       },
       refetchQueries: [GET_BOOKS],
     });
